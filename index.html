@@ -6,78 +6,47 @@
 <meta name="theme-color" content="#0d1117">
 <title>Front Office — Offseason Sim (Prototype)</title>
 <style>
-  /* ============================================================
-     DESIGN: "The Wire" — an NBA front-office war room.
-     Palette: deep ink + slate, a single hot "wire amber" accent for
-     live intel, cool blue for your team, signal-green / alert-red for
-     offer outcomes. Display face: condensed grotesque (Oswald) for the
-     front-office signage feel; body: Inter; data: a mono for the ticker.
-     Signature: the day "WIRE" — a teletype feed that streams intel,
-     offers, and signings as the clock advances.
-     ============================================================ */
   @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
-
   :root{
     --ink:#0d1117; --ink2:#161b22; --panel:#1c2230; --panel2:#222a3a;
-    --line2:#3a4560;
+    --line:#2d3650; --line2:#3a4560;
     --txt:#e6edf3; --muted:#8b97a8; --faint:#5b6677;
     --amber:#f5a524; --amber-dim:#f5a52422;
     --blue:#4d8df6; --blue-dim:#4d8df622;
     --green:#39d98a; --green-dim:#39d98a1f;
     --red:#ff5c6c; --red-dim:#ff5c6c1f;
-    --purple:#a87ffb;
-    --r:10px;
+    --purple:#a87ffb; --r:10px;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--ink);color:var(--txt);
-    font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-  body{min-height:100vh}
+  html,body{margin:0;padding:0;background:var(--ink);color:var(--txt);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   a{color:var(--blue)}
-
-  /* ---- top bar ---- */
-  .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:1rem;
-    padding:.7rem 1.1rem;background:rgba(13,17,23,.92);backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--line)}
-  .brand{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.04em;
-    font-size:1.05rem;text-transform:uppercase;display:flex;align-items:center;gap:.5rem}
-  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--amber);
-    box-shadow:0 0 0 0 var(--amber);animation:pulse 2.2s infinite}
+  .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:1rem;padding:.7rem 1.1rem;background:rgba(13,17,23,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .brand{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.04em;font-size:1.05rem;text-transform:uppercase;display:flex;align-items:center;gap:.5rem}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--amber);animation:pulse 2.2s infinite}
   @keyframes pulse{0%{box-shadow:0 0 0 0 var(--amber-dim)}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
-  .brand .tag{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--faint);
-    border:1px solid var(--line);padding:.1rem .35rem;border-radius:4px;letter-spacing:.05em}
+  .brand .tag{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--faint);border:1px solid var(--line);padding:.1rem .35rem;border-radius:4px;letter-spacing:.05em}
   .clock{margin-left:auto;display:flex;align-items:center;gap:.8rem}
-  .clock .date{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;letter-spacing:.02em}
-  .clock .phase{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--amber);
-    text-transform:uppercase;letter-spacing:.12em}
-
+  .clock .date{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600}
+  .clock .phase{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--amber);text-transform:uppercase;letter-spacing:.12em}
   .wrap{max-width:1180px;margin:0 auto;padding:1.1rem}
   .grid{display:grid;grid-template-columns:1fr 360px;gap:1.1rem;align-items:start}
   @media(max-width:880px){.grid{grid-template-columns:1fr}}
-
-  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-  .panel-hd{display:flex;align-items:center;gap:.5rem;padding:.6rem .85rem;border-bottom:1px solid var(--line);
-    font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:.8rem;font-weight:600}
-  .panel-hd .c{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);
-    text-transform:none;letter-spacing:0}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:1.1rem}
+  .panel-hd{display:flex;align-items:center;gap:.5rem;padding:.6rem .85rem;border-bottom:1px solid var(--line);font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:.8rem;font-weight:600;cursor:default}
+  .panel-hd .c{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);text-transform:none;letter-spacing:0}
+  .panel-hd.click{cursor:pointer}
   .panel-bd{padding:.85rem}
-
-  /* ---- buttons ---- */
-  .btn{font-family:'Inter',sans-serif;font-weight:600;font-size:.78rem;border-radius:8px;
-    border:1px solid var(--line2);background:var(--panel2);color:var(--txt);padding:.5rem .9rem;
-    cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:.4rem}
+  .btn{font-family:'Inter',sans-serif;font-weight:600;font-size:.78rem;border-radius:8px;border:1px solid var(--line2);background:var(--panel2);color:var(--txt);padding:.5rem .9rem;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:.4rem}
   .btn:hover{border-color:var(--blue);background:var(--blue-dim)}
   .btn.primary{background:var(--amber);color:#1a1206;border-color:var(--amber);font-weight:700}
   .btn.primary:hover{filter:brightness(1.08)}
   .btn.ghost{background:transparent}
-  .btn.sm{font-size:.68rem;padding:.32rem .6rem}
+  .btn.sm{font-size:.66rem;padding:.3rem .55rem}
   .btn:disabled{opacity:.4;cursor:not-allowed}
-
-  /* ---- the WIRE (signature element) ---- */
-  .wire{font-family:'JetBrains Mono',monospace;font-size:.72rem;line-height:1.5;
-    max-height:460px;overflow-y:auto;padding:.4rem .2rem}
-  .wire-item{display:flex;gap:.55rem;padding:.45rem .55rem;border-radius:7px;margin-bottom:.3rem;
-    border:1px solid transparent;animation:slideIn .35s ease}
+  .wire{font-family:'JetBrains Mono',monospace;font-size:.72rem;line-height:1.5;max-height:520px;overflow-y:auto;padding:.4rem .2rem}
+  .wire-item{display:flex;gap:.55rem;padding:.45rem .55rem;border-radius:7px;margin-bottom:.3rem;border:1px solid transparent;animation:slideIn .35s ease}
   @keyframes slideIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
   .wire-item .stamp{color:var(--faint);flex-shrink:0;font-size:.62rem;padding-top:.1rem;min-width:42px}
   .wire-item .body{flex:1}
   .wire-item.intel{background:var(--amber-dim);border-color:#f5a52433}
@@ -90,128 +59,98 @@
   .wire-item.loss .k{color:var(--red)}
   .wire-item.note .k{color:var(--muted)}
   .wire-item .k{font-weight:700}
+  .wire-actions{display:flex;gap:.4rem;margin-top:.45rem;flex-wrap:wrap}
+  .wire-outcome{margin-top:.4rem;color:var(--faint);font-size:.66rem;font-style:italic}
   .wire-empty{color:var(--faint);text-align:center;padding:2rem 1rem;font-size:.7rem}
-
-  /* ---- free agent cards ---- */
   .fa-list{display:flex;flex-direction:column;gap:.5rem}
-  .fa{border:1px solid var(--line);border-radius:9px;padding:.6rem .7rem;background:var(--ink2);
-    transition:.15s}
+  .fa{border:1px solid var(--line);border-radius:9px;padding:.6rem .7rem;background:var(--ink2);transition:.15s}
   .fa:hover{border-color:var(--line2)}
   .fa.interested{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber-dim)}
   .fa.signed{opacity:.55}
   .fa-top{display:flex;align-items:center;gap:.55rem}
-  .fa-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:.95rem;letter-spacing:.01em}
-  .fa-pos{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);
-    border:1px solid var(--line);padding:.05rem .3rem;border-radius:4px}
+  .fa-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:.95rem}
+  .fa-pos{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);border:1px solid var(--line);padding:.05rem .3rem;border-radius:4px}
   .fa-age{font-size:.62rem;color:var(--faint)}
   .fa-val{margin-left:auto;text-align:right}
   .fa-val .ask{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.85rem}
   .fa-val .lbl{font-size:.5rem;color:var(--faint);text-transform:uppercase;letter-spacing:.08em}
   .fa-meta{display:flex;gap:.6rem;margin-top:.45rem;flex-wrap:wrap;align-items:center}
-  .chip{font-family:'JetBrains Mono',monospace;font-size:.58rem;padding:.12rem .4rem;border-radius:5px;
-    background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
+  .chip{font-family:'JetBrains Mono',monospace;font-size:.58rem;padding:.12rem .4rem;border-radius:5px;background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
   .chip.heat{color:var(--amber);border-color:#f5a52440}
   .chip.you{color:var(--blue);border-color:#4d8df640}
-  .fa-actions{margin-left:auto;display:flex;gap:.35rem}
+  .fa-actions{margin-left:auto;display:flex;gap:.35rem;flex-wrap:wrap}
   .suitors{display:flex;gap:.25rem;align-items:center;margin-top:.4rem;flex-wrap:wrap}
-  .suitor{font-family:'JetBrains Mono',monospace;font-size:.55rem;padding:.1rem .3rem;border-radius:4px;
-    background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
+  .suitor{font-family:'JetBrains Mono',monospace;font-size:.55rem;padding:.1rem .3rem;border-radius:4px;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
   .suitor.hot{color:var(--amber);border-color:#f5a52455}
   .suitor.mine{color:var(--blue);border-color:#4d8df655;font-weight:700}
-
-  /* ---- cap strip ---- */
   .capstrip{display:flex;gap:.9rem;flex-wrap:wrap;margin-bottom:1rem}
-  .capbox{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--line);border-radius:9px;
-    padding:.6rem .75rem}
+  .capbox{flex:1;min-width:110px;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:.6rem .75rem}
   .capbox .v{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.25rem}
   .capbox .l{font-size:.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:.1rem}
-  .capbox.alert .v{color:var(--red)}
-  .capbox.good .v{color:var(--green)}
-
-  /* ---- modal ---- */
-  .scrim{position:fixed;inset:0;background:rgba(5,8,12,.7);backdrop-filter:blur(3px);z-index:200;
-    display:none;align-items:center;justify-content:center;padding:1rem}
+  .capbox.alert .v{color:var(--red)} .capbox.good .v{color:var(--green)}
+  /* roster panel */
+  #rosterBody{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem}
+  @media(max-width:620px){#rosterBody{grid-template-columns:repeat(2,1fr)}}
+  .rcol{background:var(--ink2);border:1px solid var(--line);border-radius:8px;padding:.4rem}
+  .rcol-h{font-family:'Oswald',sans-serif;font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;display:flex;justify-content:space-between;align-items:center}
+  .rcol-h .need{font-family:'JetBrains Mono',monospace;font-size:.48rem;color:var(--amber);border:1px solid #f5a52440;border-radius:4px;padding:0 .25rem;text-transform:lowercase}
+  .rrow{display:flex;justify-content:space-between;gap:.3rem;font-size:.62rem;padding:.15rem 0;border-bottom:1px solid #ffffff08}
+  .rrow:last-child{border-bottom:none}
+  .rrow.isfa .rn{color:var(--green)}
+  .rrow .rn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rrow .rs{font-family:'JetBrains Mono',monospace;color:var(--faint);flex-shrink:0}
+  .rempty{font-size:.6rem;color:var(--faint);text-align:center;padding:.3rem}
+  .scrim{position:fixed;inset:0;background:rgba(5,8,12,.7);backdrop-filter:blur(3px);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem}
   .scrim.on{display:flex}
-  .modal{background:var(--panel);border:1px solid var(--line2);border-radius:14px;max-width:460px;width:100%;
-    overflow:hidden;animation:pop .2s ease}
-  @keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
-  .modal-hd{padding:.9rem 1.1rem;border-bottom:1px solid var(--line);font-family:'Oswald',sans-serif;
-    text-transform:uppercase;letter-spacing:.05em;font-weight:600;display:flex;align-items:center;gap:.5rem}
-  .modal-bd{padding:1.1rem}
-  .modal-ft{padding:.85rem 1.1rem;border-top:1px solid var(--line);display:flex;gap:.5rem;justify-content:flex-end}
-  .field{margin-bottom:.85rem}
-  .field label{display:block;font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem}
+  .modal{background:var(--panel);border:1px solid var(--line2);border-radius:14px;max-width:460px;width:100%;overflow:hidden;animation:pop .2s ease}
+  .modal-hd{padding:.9rem 1.1rem;border-bottom:1px solid var(--line);font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.05em;font-weight:600;display:flex;align-items:center;gap:.5rem}
+  .modal-bd{padding:1.1rem} .modal-ft{padding:.85rem 1.1rem;border-top:1px solid var(--line);display:flex;gap:.5rem;justify-content:flex-end;flex-wrap:wrap}
+  .field{margin-bottom:.85rem} .field label{display:block;font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem}
   .field input[type=range]{width:100%}
   .field .rngval{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1rem;color:var(--amber)}
-
-  /* ---- intro ---- */
   .intro{max-width:680px;margin:2.5rem auto;padding:0 1.2rem;text-align:center}
-  .intro h1{font-family:'Oswald',sans-serif;font-size:2.4rem;font-weight:700;letter-spacing:.01em;margin:.2rem 0;
-    text-transform:uppercase;line-height:1.05}
+  .intro h1{font-family:'Oswald',sans-serif;font-size:2.4rem;font-weight:700;margin:.2rem 0;text-transform:uppercase;line-height:1.05}
   .intro h1 .hot{color:var(--amber)}
   .intro .sub{color:var(--muted);font-size:.9rem;line-height:1.6;margin:1rem auto 1.6rem;max-width:520px}
   .teamsel{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.5rem;margin:1.4rem 0}
-  .teamsel .t{border:1px solid var(--line);border-radius:9px;padding:.7rem .5rem;cursor:pointer;transition:.15s;
-    background:var(--panel)}
+  .teamsel .t{border:1px solid var(--line);border-radius:9px;padding:.7rem .5rem;cursor:pointer;transition:.15s;background:var(--panel)}
   .teamsel .t:hover{border-color:var(--amber);background:var(--amber-dim)}
   .teamsel .t .ab{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.1rem}
   .teamsel .t .nm{font-size:.6rem;color:var(--muted);margin-top:.1rem}
-  .flow{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;margin-top:1.4rem;font-size:.62rem;
-    font-family:'JetBrains Mono',monospace;color:var(--faint)}
+  .flow{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;margin-top:1.4rem;font-size:.62rem;font-family:'JetBrains Mono',monospace;color:var(--faint)}
   .flow span{padding:.2rem .45rem;border:1px solid var(--line);border-radius:5px}
   .flow .arr{border:none;color:var(--line2)}
-
-  .toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:var(--panel2);
-    border:1px solid var(--line2);border-radius:9px;padding:.6rem 1rem;font-size:.78rem;z-index:300;
-    box-shadow:0 8px 24px rgba(0,0,0,.4);animation:slideIn .25s ease;max-width:90vw}
-
+  .toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line2);border-radius:9px;padding:.6rem 1rem;font-size:.78rem;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:slideIn .25s ease;max-width:90vw}
   .hidden{display:none!important}
-  .muted{color:var(--muted)}
-  .tiny{font-size:.6rem}
-  .sectlbl{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:.7rem;
-    color:var(--muted);margin:.2rem 0 .6rem}
+  .muted{color:var(--muted)} .tiny{font-size:.6rem}
+  .sectlbl{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:.7rem;color:var(--muted);margin:.2rem 0 .6rem}
 </style>
 </head>
 <body>
-
-<!-- ===================== INTRO / TEAM SELECT ===================== -->
 <div id="introScreen" class="intro">
   <div class="brand" style="justify-content:center;font-size:1.3rem"><span class="dot"></span> Front Office <span class="tag">PROTOTYPE</span></div>
   <h1>Run the <span class="hot">offseason</span><br>like it's a war room</h1>
-  <p class="sub">Every rival team has its own plan. Free agents weigh their offers, wait, and counter.
-    Intel crosses the wire daily and agents call to gauge your interest. Pick a team and work the phones.</p>
+  <p class="sub">Every team starts with real contracts and its own plan. Free agents weigh offers, wait, and counter. Intel and agents cross the wire daily — and rival GMs will call with trades. Pick a team and work the phones.</p>
   <div class="sectlbl">Choose your franchise</div>
   <div id="teamSel" class="teamsel"></div>
-  <div class="flow">
-    <span>Pre-Draft</span><span class="arr">→</span><span>Draft</span><span class="arr">→</span>
-    <span>Day-by-Day from Jun 25</span><span class="arr">→</span><span>Free Agency</span><span class="arr">→</span><span>Camp</span>
-  </div>
-  <p class="tiny muted" style="margin-top:1.4rem">Prototype slice: the free-agency market on a mock league.
-    Day engine · expressed interest · counteroffers · agent calls · rival pursuit.</p>
+  <div class="flow"><span>Pre-Draft</span><span class="arr">→</span><span>Draft</span><span class="arr">→</span><span>Day-by-Day from Jun 25</span><span class="arr">→</span><span>Free Agency</span><span class="arr">→</span><span>Camp</span></div>
+  <p class="tiny muted" style="margin-top:1.4rem">Prototype: free-agency market on a mock league with full rosters · expressed interest · counters · ultimatums · agent calls · GM trades · rival pursuit.</p>
 </div>
 
-<!-- ===================== MAIN APP ===================== -->
 <div id="app" class="hidden">
   <div class="topbar">
     <div class="brand"><span class="dot"></span> Front Office <span id="myTeamTag" class="tag"></span></div>
-    <div class="clock">
-      <div>
-        <div class="date" id="clockDate">—</div>
-        <div class="phase" id="clockPhase">—</div>
-      </div>
-    </div>
+    <div class="clock"><div><div class="date" id="clockDate">—</div><div class="phase" id="clockPhase">—</div></div></div>
   </div>
-
   <div class="wrap">
     <div class="capstrip" id="capStrip"></div>
-
+    <div class="panel">
+      <div class="panel-hd click" onclick="document.getElementById('rosterWrap').classList.toggle('hidden')">🧾 Your Roster <span class="c">tap to toggle</span></div>
+      <div class="panel-bd" id="rosterWrap"><div id="rosterBody"></div></div>
+    </div>
     <div class="grid">
-      <!-- LEFT: market -->
       <div class="panel">
-        <div class="panel-hd">
-          <span id="marketTitle">Free Agent Market</span>
-          <span class="c" id="marketCount"></span>
-        </div>
+        <div class="panel-hd"><span id="marketTitle">Free Agent Market</span><span class="c" id="marketCount"></span></div>
         <div class="panel-bd">
           <div style="display:flex;gap:.5rem;margin-bottom:.85rem;flex-wrap:wrap">
             <button class="btn primary" id="advanceBtn" onclick="advanceDay()">Advance 1 Day →</button>
@@ -221,8 +160,6 @@
           <div class="fa-list" id="faList"></div>
         </div>
       </div>
-
-      <!-- RIGHT: the wire -->
       <div class="panel">
         <div class="panel-hd">📡 The Wire <span class="c" id="wireDay"></span></div>
         <div class="wire" id="wire"></div>
@@ -231,33 +168,24 @@
   </div>
 </div>
 
-<!-- offer / interest modal -->
-<div class="scrim" id="scrim">
-  <div class="modal">
-    <div class="modal-hd" id="modalHd">Make an Offer</div>
-    <div class="modal-bd" id="modalBd"></div>
-    <div class="modal-ft" id="modalFt"></div>
-  </div>
-</div>
-
+<div class="scrim" id="scrim"><div class="modal">
+  <div class="modal-hd" id="modalHd">Make an Offer</div>
+  <div class="modal-bd" id="modalBd"></div>
+  <div class="modal-ft" id="modalFt"></div>
+</div></div>
 <div id="toast"></div>
-
 <script>
 /* ============================================================
-   FRONT OFFICE — Offseason Sim (prototype slice: FA market)
-   Self-contained. Mock dataset. Engine pieces:
-     - DAY ENGINE: advances date, runs league sim each day
-     - FA MODEL: value, suitor pull, patience, sign/counter/wait,
-       leaguewide money-drift, per-game random factor (seeded)
-     - EXPRESSED INTEREST: pre-FA interest biases FA pull
-     - AGENT EVENTS: calls offering players / gauging interest
-     - RIVAL AI (stub): needs + cap + lean drive pursuit
+   FRONT OFFICE — Offseason Sim  (prototype v0.2)
+   Adds: team rosters (the RM-style base), inline wire responses,
+   agent FA deals, GM trade offers, "you were pursuing" misses,
+   ≤5-day FA decisions (likely within 3), and ultimatum offers
+   that tie up / free cap money.
    ============================================================ */
-
-const BUILD = 'rm-sim v0.1';
+const BUILD = 'rm-sim v0.2';
 console.log('[FrontOffice]', BUILD);
 
-// ---------- seeded RNG (per game, so demands vary run-to-run) ----------
+/* ---------- seeded RNG (per game) ---------- */
 let _seed = (Date.now() ^ (Math.random()*1e9)) >>> 0;
 function rng(){ _seed = (_seed*1664525 + 1013904223) >>> 0; return _seed/4294967296; }
 function rand(a,b){ return a + rng()*(b-a); }
@@ -265,164 +193,498 @@ function randInt(a,b){ return Math.floor(rand(a,b+1)); }
 function pick(arr){ return arr[Math.floor(rng()*arr.length)]; }
 function chance(p){ return rng() < p; }
 
-// ---------- mock league ----------
-const SALARY_CAP = 154.6; // $M
+/* ---------- constants ---------- */
+const SALARY_CAP = 154.6;
 const POSITIONS = ['PG','SG','SF','PF','C'];
+const FA_START_DAY = 6;   // ~July 1 (sim starts Jun 25)
+const CAMP_DAY = 20;
 
-// 8 mock teams; lean: 'win' (contender), 'mid', 'rebuild'
-const TEAMS = [
-  { ab:'NYK', name:'New York',   cap: 18, lean:'win',     needs:['C','PF'] },
-  { ab:'OKC', name:'Oklahoma City', cap: 32, lean:'win',  needs:['PF','C'] },
-  { ab:'BKN', name:'Brooklyn',   cap: 55, lean:'rebuild', needs:['PG','SG','SF'] },
-  { ab:'ORL', name:'Orlando',    cap: 40, lean:'win',     needs:['SG','PG'] },
-  { ab:'DET', name:'Detroit',    cap: 28, lean:'mid',     needs:['SF','C'] },
-  { ab:'UTA', name:'Utah',       cap: 48, lean:'rebuild', needs:['SF','PF'] },
-  { ab:'LAL', name:'LA Lakers',  cap: 12, lean:'win',     needs:['SG','C'] },
-  { ab:'SAS', name:'San Antonio',cap: 36, lean:'mid',     needs:['SG','PF'] },
+/* designed room per team (committed = CAP - room) + lean */
+const TEAMS_BASE = [
+  { ab:'NYK', name:'New York',      room:18, lean:'win' },
+  { ab:'OKC', name:'Oklahoma City', room:32, lean:'win' },
+  { ab:'BKN', name:'Brooklyn',      room:55, lean:'rebuild' },
+  { ab:'ORL', name:'Orlando',       room:40, lean:'win' },
+  { ab:'DET', name:'Detroit',       room:28, lean:'mid' },
+  { ab:'UTA', name:'Utah',          room:48, lean:'rebuild' },
+  { ab:'LAL', name:'LA Lakers',     room:12, lean:'win' },
+  { ab:'SAS', name:'San Antonio',   room:36, lean:'mid' },
 ];
 
-// mock free agent pool — value is BASE; per-game noise applied at init
 const FA_SEED = [
-  { name:'Marcus Vance',   pos:'SF', age:28, base:24, tier:'star' },
-  { name:'Deron Whitlock', pos:'C',  age:30, base:19, tier:'starter' },
-  { name:'Tyrell Mason',   pos:'PG', age:26, base:17, tier:'starter' },
-  { name:'Andre Brioche',  pos:'PF', age:31, base:14, tier:'starter' },
-  { name:'Kobe Iwuanyanwu',pos:'SG', age:24, base:12, tier:'starter' },
-  { name:'Sam Petrov',     pos:'C',  age:33, base:8,  tier:'role' },
-  { name:'DJ Okafor',      pos:'SF', age:27, base:7,  tier:'role' },
-  { name:'Lonnie Pratt',   pos:'PG', age:29, base:6,  tier:'role' },
-  { name:'Vince Carrillo', pos:'PF', age:25, base:5,  tier:'role' },
-  { name:'Theo Nakamura',  pos:'SG', age:23, base:4,  tier:'role' },
-  { name:'Big Mike Solis', pos:'C',  age:34, base:3,  tier:'vet' },
-  { name:'Ray Quist',      pos:'SF', age:32, base:2.5,tier:'vet' },
+  { name:'Marcus Vance',    pos:'SF', age:28, base:24, tier:'star' },
+  { name:'Deron Whitlock',  pos:'C',  age:30, base:19, tier:'starter' },
+  { name:'Tyrell Mason',    pos:'PG', age:26, base:17, tier:'starter' },
+  { name:'Andre Brioche',   pos:'PF', age:31, base:14, tier:'starter' },
+  { name:'Kobe Adeyemi',    pos:'SG', age:24, base:12, tier:'starter' },
+  { name:'Sam Petrov',      pos:'C',  age:33, base:8,  tier:'role' },
+  { name:'DJ Okafor',       pos:'SF', age:27, base:7,  tier:'role' },
+  { name:'Lonnie Pratt',    pos:'PG', age:29, base:6,  tier:'role' },
+  { name:'Vince Carrillo',  pos:'PF', age:25, base:5,  tier:'role' },
+  { name:'Theo Nakamura',   pos:'SG', age:23, base:4,  tier:'role' },
+  { name:'Mike Solis',      pos:'C',  age:34, base:3,  tier:'vet' },
+  { name:'Ray Quist',       pos:'SF', age:32, base:2.5,tier:'vet' },
 ];
 
-// ---------- state ----------
-let STATE = {
-  myTeam:null, day:0, phase:'predraft', // predraft -> daybyday -> camp
-  fas:[], teams:[], wire:[], simEnding:false
-};
+/* name pool for generating team rosters */
+const FIRST = ['Jalen','Cam','Dante','Malik','Trey','Bryce','Kai','Quentin','Reggie','Marcus','Devin','Isaiah','Tobias','Grant','Cole','Nikola','Luka','Bojan','Goran','Dario','Aaron','Jaylen','Tyus','Naz','Obi','Bennedict','Immanuel','Donte','Josh','Pascal','Fred','Gary','Norm','Bol','Walker','Keldon','Tre','Jeremy','Davion','Santi'];
+const LAST = ['Carter','Brooks','Reyes','Sanders','Holloway','Okeke','Vasquez','Bertans','Doncic','Saric','Gordon','Brown','Jones','Reid','Toppin','Mathurin','Quickley','DiVincenzo','Hart','Siakam','VanVleet','Trent','Powell','Sochan','Johnson','McDermott','Pope','Murphy','Bridges','Walker','Wright','Green','Kennard','Hayes','Vassell','Mann','Sengun','Smart'];
 
-const FA_START_DAY = 6;   // free agency opens day index 6 (~July 1, sim starts Jun 25)
-const CAMP_DAY = 20;      // FA market winds down
+/* ---------- state ---------- */
+let STATE = { myTeam:null, day:0, phase:'daybyday', teams:[], fas:[], wire:[] };
+let _wid = 0;
 
+/* ---------- date / money ---------- */
 function fmtDate(dayIdx){
-  // sim starts June 25
-  const start = new Date(2026,5,25);
-  const d = new Date(start.getTime() + dayIdx*86400000);
+  const d = new Date(new Date(2026,5,25).getTime() + dayIdx*86400000);
   return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
 }
 function fmt$(n){ return '$'+(Math.round(n*10)/10).toFixed(1)+'M'; }
+function lastName(fa){ return fa.name.split(' ').slice(-1)[0].toUpperCase(); }
 
-// ---------- init ----------
+/* ---------- roster generation (RM-style base) ---------- */
+function genRoster(committed, lean){
+  // weights for ~11 contracts; bigger for win-now
+  const baseW = lean==='win' ? [30,24,16,11,8,7,6,5,4,3,2]
+              : lean==='mid' ? [22,18,14,11,9,8,6,5,4,3,2]
+                             : [16,13,11,10,9,8,7,6,5,4,3];
+  const sumW = baseW.reduce((a,b)=>a+b,0);
+  const used = new Set();
+  function uniqueName(){
+    let n; do { n = pick(FIRST)+' '+pick(LAST); } while(used.has(n)); used.add(n); return n;
+  }
+  // ensure positional coverage but leave 1-2 thin (creates needs)
+  const posPlan = ['PG','PG','SG','SG','SF','SF','PF','C','PG','SF','PF'];
+  const roster = baseW.map((w,i)=>({
+    name: uniqueName(),
+    pos: posPlan[i] || pick(POSITIONS),
+    age: randInt(20,35),
+    salary: Math.max(1.5, +(committed * w/sumW).toFixed(1))
+  }));
+  return roster;
+}
+function recomputeNeeds(t){
+  const cnt = {PG:0,SG:0,SF:0,PF:0,C:0};
+  (t.roster||[]).forEach(p=>{ if(cnt[p.pos]!=null) cnt[p.pos]++; });
+  t.needs = POSITIONS.slice().sort((a,b)=>cnt[a]-cnt[b]).slice(0,2); // two thinnest
+}
+
+/* ---------- cap room ---------- */
+function rosterSalary(ab){ const t=STATE.teams.find(x=>x.ab===ab); return (t.roster||[]).reduce((s,p)=>s+p.salary,0); }
+function signedSalary(ab){ return STATE.fas.filter(f=>f.signed&&f.signed.team===ab).reduce((s,f)=>s+f.signed.aav,0); }
+function pendingSalary(ab){
+  return STATE.fas.filter(f=>!f.signed).reduce((s,f)=>
+    s + f.offers.filter(o=>o.team===ab).reduce((a,o)=>a+o.aav,0), 0);
+}
+function room(ab){ return +(SALARY_CAP - rosterSalary(ab) - signedSalary(ab) - pendingSalary(ab)).toFixed(1); }
+function myTeamObj(){ return STATE.teams.find(t=>t.ab===STATE.myTeam); }
+function teamName(ab){ const t=STATE.teams.find(x=>x.ab===ab); return t?`${t.name} (${ab})`:ab; }
+
+/* ============================================================
+   INIT
+   ============================================================ */
 function buildIntro(){
-  const sel = document.getElementById('teamSel');
-  sel.innerHTML = TEAMS.map(t =>
-    `<div class="t" onclick="startGame('${t.ab}')"><div class="ab">${t.ab}</div><div class="nm">${t.name}</div></div>`
-  ).join('');
+  document.getElementById('teamSel').innerHTML = TEAMS_BASE.map(t =>
+    `<div class="t" onclick="startGame('${t.ab}')"><div class="ab">${t.ab}</div><div class="nm">${t.name}</div></div>`).join('');
 }
 
 function startGame(ab){
-  // deep-copy teams; set my team
-  STATE.teams = TEAMS.map(t => ({...t, needs:[...t.needs]}));
-  STATE.myTeam = ab;
-  STATE.day = 0;
-  STATE.phase = 'daybyday'; // (prototype starts the day engine directly; draft stubbed)
-  STATE.wire = [];
-  STATE.simEnding = false;
+  STATE.myTeam = ab; STATE.day = 0; STATE.phase='daybyday'; STATE.wire=[]; _wid=0;
 
-  // build FA pool with per-game noise: value wobble + patience + base suitor interest
-  STATE.fas = FA_SEED.map(f => {
-    const noise = rand(0.85, 1.18);                 // per-game value factor
-    const value = Math.max(1.5, +(f.base * noise).toFixed(1));
-    return {
-      ...f, value,
-      ask: +(value * rand(1.05, 1.25)).toFixed(1),  // opening ask above value
-      floor: +(value * rand(0.78, 0.92)).toFixed(1),// won't go below this (until late)
-      patience: f.tier==='star'? randInt(5,8) : f.tier==='starter'? randInt(3,6) : randInt(1,4),
-      signed:null,                                   // {team, years, aav}
-      interest:{},                                   // teamAb -> pull score
-      myInterest:0,                                  // expressed-interest boost from user
-      offers:[],                                     // pending offers {team, aav, years}
-      lastNews:0
-    };
+  STATE.teams = TEAMS_BASE.map(t=>{
+    const committed = SALARY_CAP - t.room;
+    const team = {...t, roster: genRoster(committed, t.lean)};
+    recomputeNeeds(team);
+    return team;
   });
 
-  // seed baseline rival interest from needs/lean/cap
-  STATE.fas.forEach(fa => {
-    STATE.teams.forEach(t => {
-      if (t.ab === STATE.myTeam) return;
-      let pull = 0;
-      if (t.needs.includes(fa.pos)) pull += 30;
-      if (t.lean==='win' && (fa.tier==='star'||fa.tier==='starter')) pull += 20;
-      if (t.lean==='rebuild' && fa.age<=26) pull += 18;
-      if (t.lean==='rebuild' && fa.age>=30) pull -= 15;
-      if (t.cap >= fa.ask) pull += 15; else pull -= 25; // can they afford it
+  STATE.fas = FA_SEED.map(f=>{
+    const value = Math.max(1.5, +(f.base * rand(0.85,1.18)).toFixed(1));
+    return { ...f, value,
+      ask:+(value*rand(1.05,1.25)).toFixed(1),
+      floor:+(value*rand(0.78,0.92)).toFixed(1),
+      signed:null, interest:{}, myInterest:0, offers:[],
+      firstOfferDay:null, countered:false };
+  });
+
+  // baseline rival interest from needs / lean / affordability
+  STATE.fas.forEach(fa=>{
+    STATE.teams.forEach(t=>{
+      if(t.ab===STATE.myTeam) return;
+      let pull=0;
+      if(t.needs.includes(fa.pos)) pull+=30;
+      if(t.lean==='win' && (fa.tier==='star'||fa.tier==='starter')) pull+=20;
+      if(t.lean==='rebuild' && fa.age<=26) pull+=18;
+      if(t.lean==='rebuild' && fa.age>=30) pull-=15;
+      if(room(t.ab) >= fa.ask) pull+=15; else pull-=25;
       pull += rand(-8,8);
-      if (pull > 0) fa.interest[t.ab] = +pull.toFixed(0);
+      if(pull>0) fa.interest[t.ab]=+pull.toFixed(0);
     });
   });
 
   document.getElementById('introScreen').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
   document.getElementById('myTeamTag').textContent = STATE.myTeam;
-
-  wireAdd('note','SYS', `You're running <b>${teamName(STATE.myTeam)}</b>. Free agency opens ${fmtDate(FA_START_DAY)}. Use the days before it to express interest in free agents — it improves your odds when the market opens.`);
+  wireAdd('note','SYS',`You're running <b>${teamName(STATE.myTeam)}</b>. Free agency opens ${fmtDate(FA_START_DAY)}. Express interest in free agents now to improve your odds — and watch the wire for agent calls and trade offers.`);
   render();
 }
 
-function teamName(ab){ const t = STATE.teams.find(x=>x.ab===ab); return t?`${t.name} (${ab})`:ab; }
-function myTeamObj(){ return STATE.teams.find(t=>t.ab===STATE.myTeam); }
-
-// ---------- the WIRE ----------
-function wireAdd(kind, key, html){
-  STATE.wire.unshift({ kind, key, html, day:STATE.day });
+/* ============================================================
+   THE WIRE  (with inline responses)
+   ============================================================ */
+function wireAdd(kind, key, html, act){
+  STATE.wire.unshift({ id:++_wid, kind, key, html, day:STATE.day, act:act||null, resolved:false, outcome:null });
+  return _wid;
 }
 function renderWire(){
+  document.getElementById('wireDay').textContent = STATE.phase==='camp'?'FA closed':fmtDate(STATE.day);
   const el = document.getElementById('wire');
-  document.getElementById('wireDay').textContent = STATE.phase==='camp' ? 'FA closed' : fmtDate(STATE.day);
-  if (!STATE.wire.length){ el.innerHTML = '<div class="wire-empty">The wire is quiet. Advance the day to see what moves.</div>'; return; }
-  el.innerHTML = STATE.wire.slice(0,60).map(w =>
-    `<div class="wire-item ${w.kind}"><span class="stamp">${fmtDate(w.day)}</span><span class="body"><span class="k">${w.key}</span> ${w.html}</span></div>`
-  ).join('');
+  if(!STATE.wire.length){ el.innerHTML='<div class="wire-empty">The wire is quiet. Advance the day to see what moves.</div>'; return; }
+  el.innerHTML = STATE.wire.slice(0,80).map(w=>{
+    let actHtml='';
+    if(w.act && !w.resolved){
+      actHtml = `<div class="wire-actions">${w.act.opts.map(o=>
+        `<button class="btn sm ${o.cls||''}" onclick="respondWire(${w.id},'${o.val}')">${o.label}</button>`).join('')}</div>`;
+    } else if(w.resolved && w.outcome){
+      actHtml = `<div class="wire-outcome">→ ${w.outcome}</div>`;
+    }
+    return `<div class="wire-item ${w.kind}"><span class="stamp">${fmtDate(w.day)}</span><span class="body"><span class="k">${w.key}</span> ${w.html}${actHtml}</span></div>`;
+  }).join('');
 }
 
-// ---------- cap strip ----------
-function renderCap(){
+function respondWire(id, val){
+  const it = STATE.wire.find(w=>w.id===id); if(!it||it.resolved) return;
+  const a = it.act;
+  if(a.type==='agentPre'){
+    if(val==='yes'){ doExpressInterest(a.faName,true); it.outcome=`You expressed interest in ${a.faName}.`; }
+    else it.outcome='You passed.';
+  } else if(a.type==='agentFA'){
+    if(val==='yes'){ const ok=signNow(a.faName,a.aav,a.years); it.outcome= ok?`Signed ${a.faName} at ${fmt$(a.aav)}/yr × ${a.years}.`:`Not enough cap room — deal fell through.`; }
+    else it.outcome='You passed on the deal.';
+  } else if(a.type==='trade'){
+    if(val==='yes'){ const ok=doTrade(a); it.outcome= ok?`Trade done — acquired ${a.getName} for ${a.giveName}.`:`Trade fell through.`; }
+    else it.outcome='You declined the trade.';
+  }
+  it.resolved=true; render();
+}
+
+/* ============================================================
+   FA DECISION MODEL
+   ============================================================ */
+function faThreshold(fa){
+  const daysIn = Math.max(0, STATE.day - FA_START_DAY);
+  const drift = Math.min(0.22, daysIn*0.025);
+  const moneyLeft = STATE.teams.reduce((s,t)=>s+Math.max(0,room(t.ab)),0);
+  const scarce = moneyLeft < 60 ? 0.08 : 0;
+  return Math.max(fa.floor, fa.value*(1 - drift - scarce));
+}
+function bestOffer(fa){
+  if(!fa.offers.length) return null;
+  let best=null,bs=-1;
+  fa.offers.forEach(o=>{
+    const pull = fa.interest[o.team]||0;
+    const score = o.aav*4 + pull + (o.mine? fa.myInterest*0.5:0) + rand(-3,3);
+    if(score>bs){ bs=score; best=o; }
+  });
+  return best;
+}
+/* decide within 1-3 days most of the time, never beyond 5 */
+function faShouldDecide(fa){
+  if(!fa.offers.length || fa.firstOfferDay==null) return false;
+  const waited = STATE.day - fa.firstOfferDay;
+  if(waited >= 5) return true;                 // hard cap
+  return chance(0.32 + waited*0.22);           // d0 .32, d1 .54, d2 .76, d3 .98
+}
+function signFA(fa, offer){
+  const userWasIn = fa.myInterest>0 || fa.offers.some(o=>o.mine);
+  fa.signed = { team:offer.team, aav:offer.aav, years:offer.years };
+  fa.offers = []; // clears all tied money (winners commit, losers freed)
+  if(offer.team===STATE.myTeam){
+    wireAdd('sign','SIGNED',`🎉 <b>${fa.name}</b> signs with YOU — ${fmt$(offer.aav)}/yr × ${offer.years}.`);
+  } else if(userWasIn){
+    wireAdd('loss','MISSED',`💔 <b>${fa.name}</b> — a player you were pursuing — signs with <b>${offer.team}</b> (${fmt$(offer.aav)}/yr × ${offer.years}). You missed out.`);
+  } else {
+    wireAdd('loss','SIGNED',`<b>${fa.name}</b> signs with <b>${offer.team}</b> — ${fmt$(offer.aav)}/yr × ${offer.years}.`);
+  }
+}
+function resolveFA(fa){
+  const best = bestOffer(fa); if(!best) return;
+  const thr = faThreshold(fa);
+  const waited = STATE.day - (fa.firstOfferDay ?? STATE.day);
+  const forced = waited >= 5;
+  if(best.aav >= thr || forced){ signFA(fa, best); return; }
+  if(!fa.countered){
+    fa.countered=true;
+    const counter = +(Math.max(best.aav, (best.aav+fa.ask)/2)).toFixed(1);
+    fa.ask = counter;
+    if(best.mine || fa.interest[STATE.myTeam] || fa.myInterest){
+      wireAdd('offer', lastName(fa), `Camp counters — wants <b>${fmt$(counter)}</b>/yr. ${best.aav<thr?'Current offers are light.':'Close — push a little.'}`);
+    }
+  }
+}
+
+/* ============================================================
+   USER ACTIONS
+   ============================================================ */
+function doExpressInterest(name, silent){
+  const fa = STATE.fas.find(f=>f.name===name); if(!fa||fa.signed) return false;
+  if(fa.myInterest>0){ if(!silent) toast('Already interested in '+name); return false; }
+  fa.myInterest = randInt(15,28);
+  fa.interest[STATE.myTeam] = (fa.interest[STATE.myTeam]||0) + fa.myInterest;
+  if(!silent) wireAdd('note','YOU',`You signaled interest in <b>${fa.name}</b> (${fa.pos}). His camp is aware — it'll help in FA.`);
+  if(!silent) toast(`Interest registered in ${name}`);
+  return true;
+}
+function expressInterest(name){ if(doExpressInterest(name,false)) render(); }
+
+function signNow(name, aav, years){
+  const fa = STATE.fas.find(f=>f.name===name); if(!fa||fa.signed) return false;
+  if(aav > room(STATE.myTeam)+0.01) return false;
+  fa.signed={team:STATE.myTeam,aav,years}; fa.offers=[];
+  wireAdd('sign','SIGNED',`🤝 <b>${fa.name}</b> signs with YOU — ${fmt$(aav)}/yr × ${years}.`);
+  return true;
+}
+
+function openOffer(name){
+  const fa = STATE.fas.find(f=>f.name===name); if(!fa||fa.signed) return;
+  const r = room(STATE.myTeam);
+  const existing = fa.offers.find(o=>o.mine);
+  const start = existing ? existing.aav : Math.min(r + (existing?existing.aav:0), fa.ask);
+  const maxAav = Math.max(2, Math.ceil(r + (existing?existing.aav:0)));
+  document.getElementById('modalHd').innerHTML = `📝 Offer — ${fa.name} <span class="fa-pos" style="margin-left:.4rem">${fa.pos}</span>`;
+  document.getElementById('modalBd').innerHTML = `
+    <p class="tiny muted" style="margin-top:0">Asking <b>${fmt$(fa.ask)}</b>/yr · est. value <b>${fmt$(fa.value)}</b> · your room <b>${fmt$(r)}</b></p>
+    <div class="field"><label>Annual value (AAV)</label>
+      <input type="range" id="offerAav" min="1" max="${maxAav}" step="0.5" value="${Math.max(1,start).toFixed(1)}"
+        oninput="document.getElementById('aavVal').textContent='$'+(+this.value).toFixed(1)+'M'">
+      <div class="rngval" id="aavVal">${fmt$(Math.max(1,start))}</div></div>
+    <div class="field"><label>Years</label>
+      <input type="range" id="offerYears" min="1" max="4" step="1" value="2"
+        oninput="document.getElementById('yrVal').textContent=this.value+' yr'+(this.value>1?'s':'')">
+      <div class="rngval" id="yrVal">2 yrs</div></div>
+    <p class="tiny muted">An <b>ultimatum</b> forces an answer now. If he declines, your money is freed and you can re-engage later if he's still unsigned.</p>`;
+  document.getElementById('modalFt').innerHTML =
+    `<button class="btn ghost" onclick="closeModal()">Cancel</button>
+     <button class="btn" onclick="submitOffer('${fa.name}',false)">Submit Offer</button>
+     <button class="btn primary" onclick="submitOffer('${fa.name}',true)">Ultimatum</button>`;
+  document.getElementById('scrim').classList.add('on');
+}
+function closeModal(){ document.getElementById('scrim').classList.remove('on'); }
+
+function submitOffer(name, isUltimatum){
+  const fa = STATE.fas.find(f=>f.name===name); if(!fa||fa.signed) return;
+  const aav = +document.getElementById('offerAav').value;
+  const years = +document.getElementById('offerYears').value;
+  // free any prior offer of mine first so room math is correct
+  fa.offers = fa.offers.filter(o=>!o.mine);
+  if(aav > room(STATE.myTeam)+0.01){ toast('Not enough cap room for that offer'); return; }
+  fa.offers.push({ team:STATE.myTeam, aav, years, mine:true });
+  if(fa.firstOfferDay==null) fa.firstOfferDay = STATE.day;
+  closeModal();
+  if(isUltimatum){
+    const thr = faThreshold(fa);
+    const accept = aav >= thr * rand(0.99,1.06);
+    if(accept){ signFA(fa,{team:STATE.myTeam,aav,years,mine:true}); toast(`${fa.name} accepts your ultimatum!`); }
+    else {
+      fa.offers = fa.offers.filter(o=>!o.mine); // money freed
+      wireAdd('note', lastName(fa), `<b>${fa.name}</b> rejects your ultimatum — your ${fmt$(aav)}/yr is off the table and your money is freed. You can re-engage if he stays unsigned.`);
+      toast(`${fa.name} declined — money freed`);
+    }
+  } else {
+    wireAdd('offer','YOU',`Offered <b>${fa.name}</b> ${fmt$(aav)}/yr × ${years} — his camp is reviewing.`);
+  }
+  render();
+}
+
+function withdrawOffer(name){
+  const fa = STATE.fas.find(f=>f.name===name); if(!fa) return;
+  fa.offers = fa.offers.filter(o=>!o.mine);
+  wireAdd('note','YOU',`You withdrew your offer to <b>${fa.name}</b> — money freed.`);
+  toast('Offer withdrawn'); render();
+}
+
+/* ============================================================
+   RIVAL AI (stub) + AGENT EVENTS + TRADE OFFERS
+   ============================================================ */
+function rivalDay(){
+  STATE.teams.forEach(t=>{
+    if(t.ab===STATE.myTeam || STATE.day<FA_START_DAY) return;
+    const r = room(t.ab); if(r<2) return;
+    const cands = STATE.fas.filter(f=>!f.signed && f.interest[t.ab]>=25)
+      .sort((a,b)=>b.interest[t.ab]-a.interest[t.ab]);
+    cands.forEach(fa=>{
+      if(fa.signed || room(t.ab) < fa.floor) return;
+      const want = fa.interest[t.ab];
+      const p = Math.min(0.6, 0.06 + want/250 + (STATE.day-FA_START_DAY)*0.012);
+      if(chance(p)){
+        const aav = +Math.min(room(t.ab)+ (fa.offers.filter(o=>o.team===t.ab).reduce((a,o)=>a+o.aav,0)),
+                              Math.max(fa.floor, fa.value*rand(0.9,1.12))).toFixed(1);
+        if(aav < fa.floor) return;
+        fa.offers = fa.offers.filter(o=>o.team!==t.ab);
+        fa.offers.push({ team:t.ab, aav, years:randInt(1,4) });
+        if(fa.firstOfferDay==null) fa.firstOfferDay = STATE.day;
+        if(fa.interest[STATE.myTeam] || fa.myInterest || fa.offers.some(o=>o.mine)){
+          wireAdd('intel','INTEL',`<b>${t.ab}</b> tabled ~${fmt$(aav)}/yr to <b>${fa.name}</b>. You're in the mix — act if you want him.`);
+        }
+      }
+    });
+  });
+}
+
+function agentEvent(){
+  const avail = STATE.fas.filter(f=>!f.signed); if(!avail.length) return;
+  if(STATE.day < FA_START_DAY){
+    if(chance(0.5)){
+      const fa = pick(avail.filter(f=>f.myInterest===0)) || pick(avail);
+      const fit = myTeamObj().needs.includes(fa.pos);
+      wireAdd('intel','AGENT',
+        `An agent calls about <b>${fa.name}</b> (${fa.pos}, ${fa.age}). ${fit?'Says his client likes your situation.':'Gauging the market.'} Express interest now?`,
+        { type:'agentPre', faName:fa.name, opts:[
+          {label:'Express interest', val:'yes', cls:'primary'}, {label:'Pass', val:'no', cls:'ghost'} ] });
+    }
+  } else {
+    if(chance(0.4)){
+      const fa = pick(avail);
+      const r = room(STATE.myTeam);
+      if(r >= fa.floor){
+        const wants = +Math.min(r, fa.ask*rand(0.9,1.05)).toFixed(1);
+        const years = randInt(2,4);
+        wireAdd('intel','AGENT',
+          `Agent offers a deal: <b>${fa.name}</b> (${fa.pos}, ${fa.age}) will sign now for <b>${fmt$(wants)}</b>/yr × ${years}.`,
+          { type:'agentFA', faName:fa.name, aav:wants, years, opts:[
+            {label:`Sign ${fmt$(wants)}/yr`, val:'yes', cls:'primary'}, {label:'Pass', val:'no', cls:'ghost'} ] });
+      }
+    }
+  }
+}
+
+function tradeEvent(){
+  if(!chance(0.28)) return;
   const me = myTeamObj();
-  const committed = STATE.fas.filter(f=>f.signed && f.signed.team===STATE.myTeam)
-    .reduce((s,f)=>s+f.signed.aav,0);
-  const room = me.cap - committed;
-  const signedCount = STATE.fas.filter(f=>f.signed && f.signed.team===STATE.myTeam).length;
-  const el = document.getElementById('capStrip');
-  el.innerHTML = `
-    <div class="capbox ${room<2?'alert':'good'}"><div class="v">${fmt$(room)}</div><div class="l">Cap Space</div></div>
-    <div class="capbox"><div class="v">${signedCount}</div><div class="l">FAs Signed</div></div>
-    <div class="capbox"><div class="v">${STATE.fas.filter(f=>!f.signed).length}</div><div class="l">Still Available</div></div>
-    <div class="capbox"><div class="v">${STATE.phase==='daybyday' && STATE.day<FA_START_DAY ? 'Pre-FA' : (STATE.phase==='camp'?'Closed':'OPEN')}</div><div class="l">Market</div></div>`;
+  const rivals = STATE.teams.filter(t=>t.ab!==STATE.myTeam && t.roster.length);
+  const t = pick(rivals); if(!t) return;
+  const maxSal = Math.max(...t.roster.map(p=>p.salary));
+  // tradeable = not a star: salary <= 18 and not their top earner
+  const cands = t.roster.filter(p=>p.salary<=18 && p.salary<maxSal);
+  if(!cands.length) return;
+  const get = pick(cands);
+  // they want a similar-salary player of yours (±4M), not your top earner
+  const myMax = Math.max(...me.roster.map(p=>p.salary));
+  const giveCands = me.roster.filter(p=>Math.abs(p.salary-get.salary)<=4 && p.salary<myMax);
+  if(!giveCands.length) return;
+  const give = pick(giveCands);
+  wireAdd('offer','GM',
+    `<b>${t.ab}</b> is shopping <b>${get.name}</b> (${get.pos}, ${get.age}, ${fmt$(get.salary)}). They'll take <b>${give.name}</b> (${give.pos}, ${fmt$(give.salary)}) straight up.`,
+    { type:'trade', fromTeam:t.ab, getName:get.name, giveName:give.name, opts:[
+      {label:'Accept trade', val:'yes', cls:'primary'}, {label:'Decline', val:'no', cls:'ghost'} ] });
 }
 
-// ---------- FA list ----------
+function doTrade(a){
+  const me = myTeamObj(); const them = STATE.teams.find(t=>t.ab===a.fromTeam);
+  const give = me.roster.find(p=>p.name===a.giveName);
+  const get = them.roster.find(p=>p.name===a.getName);
+  if(!give||!get) return false;
+  me.roster = me.roster.filter(p=>p.name!==give.name); me.roster.push({...get});
+  them.roster = them.roster.filter(p=>p.name!==get.name); them.roster.push({...give});
+  recomputeNeeds(me); recomputeNeeds(them);
+  wireAdd('sign','TRADE',`🔁 Trade complete — acquired <b>${get.name}</b> (${get.pos}) from ${them.ab} for ${give.name}.`);
+  return true;
+}
+
+/* ============================================================
+   DAY ENGINE
+   ============================================================ */
+function runDaySim(){
+  rivalDay();
+  STATE.fas.forEach(fa=>{
+    if(fa.signed) return;
+    if(fa.offers.length && fa.firstOfferDay==null) fa.firstOfferDay = STATE.day;
+    if(faShouldDecide(fa)) resolveFA(fa);
+  });
+}
+
+function advanceDay(){
+  if(STATE.phase==='camp') return;
+  STATE.day++;
+  if(STATE.day===FA_START_DAY) wireAdd('note','SYS','🟢 <b>Free agency is OPEN.</b> Offers can be signed now — your expressed interest is in play.');
+  agentEvent();           // may add an interactive wire item
+  tradeEvent();           // may add an interactive trade offer
+  runDaySim();
+  if(STATE.day>=CAMP_DAY) wireAdd('note','SYS','⌛ The market has cooled. Proceed to training camp when your roster is set.');
+  render();
+}
+
+function simToEnd(){
+  let guard=0;
+  while(STATE.day<CAMP_DAY && guard++<60){ STATE.day++; runDaySim(); }
+  // last call: unsigned FAs take the best standing offer
+  STATE.fas.forEach(fa=>{ if(fa.signed) return; const b=bestOffer(fa); if(b) signFA(fa,b); });
+  wireAdd('note','SYS','Free agency has ended. Review your roster and head to training camp.');
+  render();
+}
+
+function goCamp(){
+  STATE.phase='camp';
+  const mine = STATE.fas.filter(f=>f.signed&&f.signed.team===STATE.myTeam);
+  const spent = mine.reduce((s,f)=>s+f.signed.aav,0);
+  wireAdd('note','CAMP',`Training camp opens. You added ${mine.length} free agent${mine.length===1?'':'s'} for ${fmt$(spent)}/yr.`);
+  render();
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function renderCap(){
+  const r = room(STATE.myTeam);
+  const signedCount = STATE.fas.filter(f=>f.signed&&f.signed.team===STATE.myTeam).length;
+  const pend = pendingSalary(STATE.myTeam);
+  document.getElementById('capStrip').innerHTML = `
+    <div class="capbox ${r<2?'alert':'good'}"><div class="v">${fmt$(r)}</div><div class="l">Cap Room</div></div>
+    <div class="capbox"><div class="v">${fmt$(pend)}</div><div class="l">Tied in Offers</div></div>
+    <div class="capbox"><div class="v">${signedCount}</div><div class="l">FAs Signed</div></div>
+    <div class="capbox"><div class="v">${STATE.phase==='camp'?'Closed':(STATE.day<FA_START_DAY?'Pre-FA':'OPEN')}</div><div class="l">Market</div></div>`;
+}
+
+function renderRoster(){
+  const me = myTeamObj(); if(!me) return;
+  const el = document.getElementById('rosterBody'); if(!el) return;
+  const byPos = {}; POSITIONS.forEach(p=>byPos[p]=[]);
+  me.roster.forEach(p=>{ (byPos[p.pos]=byPos[p.pos]||[]).push(p); });
+  STATE.fas.filter(f=>f.signed&&f.signed.team===STATE.myTeam).forEach(f=>{
+    (byPos[f.pos]=byPos[f.pos]||[]).push({name:f.name,pos:f.pos,age:f.age,salary:f.signed.aav,fa:true});
+  });
+  el.innerHTML = POSITIONS.map(pos=>{
+    const arr = (byPos[pos]||[]).sort((a,b)=>b.salary-a.salary);
+    if(!arr.length) return `<div class="rcol"><div class="rcol-h">${pos} <span class="need">need</span></div><div class="rempty">—</div></div>`;
+    return `<div class="rcol"><div class="rcol-h">${pos}${me.needs.includes(pos)?' <span class="need">need</span>':''}</div>${
+      arr.map(p=>`<div class="rrow ${p.fa?'isfa':''}"><span class="rn">${p.name}</span><span class="rs">${fmt$(p.salary)}</span></div>`).join('')}</div>`;
+  }).join('');
+}
+
 function renderFAs(){
   const list = document.getElementById('faList');
-  const me = myTeamObj();
-  const committed = STATE.fas.filter(f=>f.signed && f.signed.team===STATE.myTeam).reduce((s,f)=>s+f.signed.aav,0);
-  const room = me.cap - committed;
+  const r = room(STATE.myTeam);
   const preFA = STATE.day < FA_START_DAY;
   document.getElementById('marketCount').textContent =
-    `${STATE.fas.filter(f=>!f.signed).length} available · room ${fmt$(room)}`;
+    `${STATE.fas.filter(f=>!f.signed).length} available · room ${fmt$(r)}`;
+  document.getElementById('marketTitle').textContent = preFA ? 'Free Agents — Scouting Board' : 'Free Agent Market';
 
-  const sorted = [...STATE.fas].sort((a,b)=> (a.signed?1:0)-(b.signed?1:0) || b.value-a.value);
+  const sorted = [...STATE.fas].sort((a,b)=>(a.signed?1:0)-(b.signed?1:0) || b.value-a.value);
   list.innerHTML = sorted.map(fa=>{
     const mine = fa.signed && fa.signed.team===STATE.myTeam;
+    const myOffer = fa.offers.find(o=>o.mine);
     const suitors = Object.entries(fa.interest).sort((a,b)=>b[1]-a[1]).slice(0,4);
     const heat = Object.keys(fa.interest).length;
-    let actions = '';
-    if (fa.signed){
+    let actions='';
+    if(fa.signed){
       actions = `<span class="chip ${mine?'you':''}">${mine?'✓ Signed by you':'Signed · '+fa.signed.team} · ${fmt$(fa.signed.aav)}/${fa.signed.years}y</span>`;
-    } else if (preFA){
-      const expressed = fa.myInterest>0;
-      actions = `<button class="btn sm ${expressed?'':'primary'}" onclick="expressInterest('${fa.name}')">${expressed?'✓ Interested':'Express Interest'}</button>`;
+    } else if(preFA){
+      const ex = fa.myInterest>0;
+      actions = `<button class="btn sm ${ex?'':'primary'}" onclick="expressInterest('${fa.name}')">${ex?'✓ Interested':'Express Interest'}</button>`;
+    } else if(myOffer){
+      actions = `<button class="btn sm" onclick="openOffer('${fa.name}')">Revise</button>
+                 <button class="btn sm primary" onclick="ultimatumQuick('${fa.name}')">Ultimatum</button>
+                 <button class="btn sm ghost" onclick="withdrawOffer('${fa.name}')">Withdraw</button>`;
     } else {
       actions = `<button class="btn sm primary" onclick="openOffer('${fa.name}')">Make Offer</button>`;
     }
@@ -436,281 +698,55 @@ function renderFAs(){
       <div class="fa-meta">
         <span class="chip">est. value ${fmt$(fa.value)}</span>
         <span class="chip ${heat>=3?'heat':''}">${heat} suitor${heat===1?'':'s'}</span>
-        ${fa.myInterest>0 && !fa.signed?`<span class="chip you">your interest +${fa.myInterest}</span>`:''}
+        ${myOffer?`<span class="chip you">your offer ${fmt$(myOffer.aav)}</span>`:''}
+        ${fa.myInterest>0&&!fa.signed&&!myOffer?`<span class="chip you">interest +${fa.myInterest}</span>`:''}
         <span class="fa-actions">${actions}</span>
       </div>
-      ${suitors.length && !fa.signed ? `<div class="suitors">${suitors.map(([ab,v])=>
+      ${suitors.length&&!fa.signed?`<div class="suitors">${suitors.map(([ab,v])=>
         `<span class="suitor ${ab===STATE.myTeam?'mine':v>=40?'hot':''}">${ab} ${v}</span>`).join('')}</div>`:''}
     </div>`;
   }).join('');
 }
 
-function render(){
-  document.getElementById('clockDate').textContent = STATE.phase==='camp' ? 'Training Camp' : fmtDate(STATE.day);
-  document.getElementById('clockPhase').textContent =
-    STATE.phase==='camp' ? 'roster lock' : (STATE.day<FA_START_DAY ? 'pre–free agency' : 'free agency · open');
-  document.getElementById('advanceBtn').style.display = STATE.phase==='camp' ? 'none':'';
-  document.getElementById('simBtn').style.display = (STATE.phase==='daybyday' && STATE.day>=FA_START_DAY) ? '':'none';
-  document.getElementById('campBtn').style.display = (STATE.phase==='daybyday' && STATE.day>=FA_START_DAY) ? '':'none';
-  document.getElementById('marketTitle').textContent = STATE.day<FA_START_DAY ? 'Free Agents — Scouting Board' : 'Free Agent Market';
-  renderCap(); renderFAs(); renderWire();
-}
-
-// ---------- player actions ----------
-function expressInterest(name){
-  const fa = STATE.fas.find(f=>f.name===name); if(!fa||fa.signed) return;
-  if (fa.myInterest>0){ toast('Already expressed interest in '+name); return; }
-  fa.myInterest = randInt(15,28);
-  fa.interest[STATE.myTeam] = (fa.interest[STATE.myTeam]||0) + fa.myInterest;
-  wireAdd('note','YOU', `You signaled interest in <b>${fa.name}</b> (${fa.pos}). His camp is aware — it'll help when FA opens.`);
-  toast(`Interest registered in ${name}`);
-  render();
-}
-
-function openOffer(name){
-  const fa = STATE.fas.find(f=>f.name===name); if(!fa||fa.signed) return;
-  const me = myTeamObj();
-  const committed = STATE.fas.filter(f=>f.signed&&f.signed.team===STATE.myTeam).reduce((s,f)=>s+f.signed.aav,0);
-  const room = me.cap - committed;
-  const start = Math.min(room, fa.ask);
-  document.getElementById('modalHd').innerHTML = `📝 Offer — ${fa.name} <span class="fa-pos" style="margin-left:.4rem">${fa.pos}</span>`;
-  document.getElementById('modalBd').innerHTML = `
-    <p class="tiny muted" style="margin-top:0">Asking <b>${fmt$(fa.ask)}</b>/yr · est. value <b>${fmt$(fa.value)}</b> · your room <b>${fmt$(room)}</b></p>
-    <div class="field">
-      <label>Annual value (AAV)</label>
-      <input type="range" id="offerAav" min="1" max="${Math.max(2,Math.ceil(room))}" step="0.5" value="${Math.max(1,start.toFixed(1))}" oninput="document.getElementById('aavVal').textContent='$'+(+this.value).toFixed(1)+'M'">
-      <div class="rngval" id="aavVal">${fmt$(Math.max(1,start))}</div>
-    </div>
-    <div class="field">
-      <label>Years</label>
-      <input type="range" id="offerYears" min="1" max="4" step="1" value="2" oninput="document.getElementById('yrVal').textContent=this.value+' yr'+(this.value>1?'s':'')">
-      <div class="rngval" id="yrVal">2 yrs</div>
-    </div>`;
-  document.getElementById('modalFt').innerHTML =
-    `<button class="btn ghost" onclick="closeModal()">Cancel</button>
-     <button class="btn primary" onclick="submitOffer('${fa.name}')">Submit Offer</button>`;
-  document.getElementById('scrim').classList.add('on');
-}
-function closeModal(){ document.getElementById('scrim').classList.remove('on'); }
-
-function submitOffer(name){
-  const fa = STATE.fas.find(f=>f.name===name); if(!fa||fa.signed) return;
-  const aav = +document.getElementById('offerAav').value;
-  const years = +document.getElementById('offerYears').value;
-  const me = myTeamObj();
-  const committed = STATE.fas.filter(f=>f.signed&&f.signed.team===STATE.myTeam).reduce((s,f)=>s+f.signed.aav,0);
-  if (aav > me.cap - committed + 0.01){ toast('Not enough cap room for that offer'); return; }
-  fa.offers = fa.offers.filter(o=>o.team!==STATE.myTeam);
-  fa.offers.push({ team:STATE.myTeam, aav, years, mine:true });
-  wireAdd('offer','YOU', `Offered <b>${fa.name}</b> ${fmt$(aav)}/yr over ${years} — his camp is reviewing.`);
-  closeModal();
-  // immediate reaction sometimes
-  evaluateFA(fa, true);
-  render();
-}
-
-// ---------- FA DECISION MODEL ----------
-function faThreshold(fa){
-  // willingness drifts down as FA drags on and money dries up
-  const daysIn = Math.max(0, STATE.day - FA_START_DAY);
-  const drift = Math.min(0.22, daysIn * 0.025);        // up to -22% late
-  const moneyLeft = STATE.teams.reduce((s,t)=> s + Math.max(0,t.cap - committedFor(t.ab)),0);
-  const scarce = moneyLeft < 60 ? 0.08 : 0;            // extra give if leaguewide money low
-  return Math.max(fa.floor, fa.value * (1 - drift - scarce));
-}
-function committedFor(ab){ return STATE.fas.filter(f=>f.signed&&f.signed.team===ab).reduce((s,f)=>s+f.signed.aav,0); }
-
-function bestOffer(fa){
-  if (!fa.offers.length) return null;
-  // score each offer: money + suitor pull (interest) — players favor money but
-  // weighted by how much a team wants them (role/fit) and your expressed interest
-  let best=null, bestScore=-1;
-  fa.offers.forEach(o=>{
-    const pull = (fa.interest[o.team]||0);
-    const score = o.aav*4 + pull + (o.mine? fa.myInterest*0.5:0) + rand(-3,3);
-    if (score>bestScore){ bestScore=score; best=o; }
-  });
-  return best;
-}
-
-function evaluateFA(fa, immediate){
-  if (fa.signed) return;
+function ultimatumQuick(name){
+  // re-issue current offer as an ultimatum
+  const fa = STATE.fas.find(f=>f.name===name); const o = fa && fa.offers.find(x=>x.mine);
+  if(!o) return;
   const thr = faThreshold(fa);
-  const best = bestOffer(fa);
-  if (!best) return;
-
-  // accept if best offer clears threshold (with a little randomness)
-  const accept = best.aav >= thr * rand(0.97,1.04);
-  const patientEnough = (STATE.day - FA_START_DAY) < fa.patience;
-
-  if (accept && (!patientEnough || best.aav >= fa.ask*0.98 || !immediate)){
-    fa.signed = { team:best.team, aav:best.aav, years:best.years };
-    if (best.team===STATE.myTeam) wireAdd('sign','SIGNED', `🎉 <b>${fa.name}</b> signs with YOU — ${fmt$(best.aav)}/yr × ${best.years}.`);
-    else wireAdd('loss','SIGNED', `<b>${fa.name}</b> signs with <b>${best.team}</b> — ${fmt$(best.aav)}/yr × ${best.years}.`);
-    return;
-  }
-
-  // counter if there's a real offer but below ask
-  if (immediate && best.mine && best.aav < fa.ask*0.98){
-    const counter = +(Math.max(best.aav, (best.aav+fa.ask)/2)).toFixed(1);
-    fa.ask = counter;
-    wireAdd('offer', fa.name.split(' ')[1].toUpperCase(), `Camp counters: wants <b>${fmt$(counter)}</b>/yr. ${best.aav<thr?'Your offer is light.':'Close — push a bit.'}`);
-    toast(`${fa.name} countered at ${fmt$(counter)}/yr`);
-  }
+  const accept = o.aav >= thr*rand(0.99,1.06);
+  if(accept){ signFA(fa,{team:STATE.myTeam,aav:o.aav,years:o.years,mine:true}); toast(`${fa.name} accepts!`); }
+  else { fa.offers=fa.offers.filter(x=>!x.mine);
+    wireAdd('note',lastName(fa),`<b>${fa.name}</b> rejects your ultimatum — money freed. Re-engage later if he's unsigned.`);
+    toast(`${fa.name} declined — money freed`); }
+  render();
 }
 
-// ---------- RIVAL AI (stub: deepen later) ----------
-function rivalDay(){
-  // each rival with cap + interest may table an offer on a FA they value
-  STATE.teams.forEach(t=>{
-    if (t.ab===STATE.myTeam) return;
-    if (STATE.day < FA_START_DAY) return; // rivals only sign once FA opens
-    const room = t.cap - committedFor(t.ab);
-    if (room < 2) return;
-    // candidate FAs this team is interested in & can afford
-    const cands = STATE.fas.filter(f=>!f.signed && f.interest[t.ab] && (f.interest[t.ab]>=25) )
-      .sort((a,b)=> (b.interest[t.ab]) - (a.interest[t.ab]));
-    cands.forEach(fa=>{
-      if (fa.signed) return;
-      if (room < fa.floor) return;
-      // probability scales with how much they want him & day pressure
-      const want = fa.interest[t.ab];
-      const p = Math.min(0.6, 0.06 + want/250 + (STATE.day-FA_START_DAY)*0.012);
-      if (chance(p)){
-        const aav = +Math.min(room, Math.max(fa.floor, fa.value*rand(0.9,1.12))).toFixed(1);
-        if (aav < fa.floor) return;
-        fa.offers = fa.offers.filter(o=>o.team!==t.ab);
-        fa.offers.push({ team:t.ab, aav, years:randInt(1,4) });
-        if (fa.interest[STATE.myTeam] || fa.myInterest){
-          wireAdd('intel','INTEL', `<b>${t.ab}</b> tabled an offer to <b>${fa.name}</b> (~${fmt$(aav)}/yr). You're in the mix — move if you want him.`);
-        }
-      }
-    });
-  });
-}
-
-// ---------- AGENT EVENTS ----------
-function agentEvent(){
-  const avail = STATE.fas.filter(f=>!f.signed);
-  if (!avail.length) return;
-  if (STATE.day < FA_START_DAY){
-    // pre-FA: agent gauges your interest / floats a client
-    if (chance(0.5)){
-      const fa = pick(avail);
-      const me = myTeamObj();
-      const fit = me.needs.includes(fa.pos);
-      wireAdd('intel','AGENT', `An agent calls about <b>${fa.name}</b> (${fa.pos}, ${fa.age}). ${fit?'Says his client likes your situation.':'Floating him around the league.'} Expressing interest now would help in FA.`);
-    }
+function render(){
+  document.getElementById('clockDate').textContent = STATE.phase==='camp'?'Training Camp':fmtDate(STATE.day);
+  document.getElementById('clockPhase').textContent =
+    STATE.phase==='camp'?'roster lock':(STATE.day<FA_START_DAY?'pre–free agency':'free agency · open');
+  document.getElementById('advanceBtn').style.display = STATE.phase==='camp'?'none':'';
+  document.getElementById('simBtn').style.display = (STATE.phase==='daybyday'&&STATE.day>=FA_START_DAY)?'':'none';
+  document.getElementById('campBtn').style.display = (STATE.phase==='daybyday'&&STATE.day>=FA_START_DAY)?'':'none';
+  if(STATE.phase==='camp'){
+    const mine = STATE.fas.filter(f=>f.signed&&f.signed.team===STATE.myTeam);
+    document.getElementById('faList').innerHTML =
+      `<div style="text-align:center;padding:1.5rem"><div class="sectlbl">Camp — Free Agents Added</div>
+       <p class="tiny muted">Prototype ends here. In the full version, camp is one screen to set the 18-man roster.</p>
+       <div style="margin-top:1rem;display:flex;flex-direction:column;gap:.4rem">${
+         mine.length? mine.map(f=>`<div class="fa"><div class="fa-top"><span class="fa-name">${f.name}</span><span class="fa-pos">${f.pos}</span><span class="fa-val"><div class="ask">${fmt$(f.signed.aav)}</div><div class="lbl">${f.signed.years}y</div></span></div></div>`).join('')
+         :'<p class="muted tiny">You signed no free agents.</p>'}</div></div>`;
   } else {
-    // during FA: agent brings a deal directly
-    if (chance(0.4)){
-      const fa = pick(avail);
-      const me = myTeamObj();
-      const room = me.cap - committedFor(STATE.myTeam);
-      if (room >= fa.floor){
-        const wants = +(fa.ask*rand(0.92,1.05)).toFixed(1);
-        openAgentDeal(fa, Math.min(room,wants));
-        return true;
-      }
-    }
+    renderFAs();
   }
-  return false;
+  renderCap(); renderRoster(); renderWire();
 }
 
-function openAgentDeal(fa, wants){
-  document.getElementById('modalHd').innerHTML = `📞 Agent Call — ${fa.name}`;
-  document.getElementById('modalBd').innerHTML = `
-    <p class="tiny muted" style="margin-top:0">An agent offers you the inside track on <b>${fa.name}</b> (${fa.pos}, ${fa.age}y).</p>
-    <p style="font-size:.85rem;line-height:1.5">"My client respects your program. Put <b>${fmt$(wants)}</b>/yr on the table right now and he'll sign before the market heats up."</p>`;
-  document.getElementById('modalFt').innerHTML =
-    `<button class="btn ghost" onclick="closeModal();render()">Pass</button>
-     <button class="btn primary" onclick="acceptAgentDeal('${fa.name}',${wants})">Sign ${fmt$(wants)}/yr</button>`;
-  document.getElementById('scrim').classList.add('on');
-}
-function acceptAgentDeal(name, aav){
-  const fa = STATE.fas.find(f=>f.name===name);
-  const me = myTeamObj();
-  if (!fa||fa.signed){ closeModal(); return; }
-  if (aav > me.cap - committedFor(STATE.myTeam)+0.01){ toast('Not enough room'); closeModal(); return; }
-  fa.signed = { team:STATE.myTeam, aav, years:randInt(2,4) };
-  wireAdd('sign','SIGNED', `🤝 Agent deal done — <b>${fa.name}</b> signs with YOU at ${fmt$(aav)}/yr.`);
-  closeModal(); render();
-}
-
-// ---------- DAY ENGINE ----------
-function advanceDay(){
-  if (STATE.phase==='camp') return;
-  STATE.day++;
-
-  // FA opens
-  if (STATE.day===FA_START_DAY){
-    wireAdd('note','SYS','🟢 <b>Free agency is OPEN.</b> Offers can now be signed. Your expressed interest is in play.');
-  }
-
-  // 1) agent event (may open a modal and pause)
-  const paused = agentEvent();
-
-  // 2) rivals act
-  rivalDay();
-
-  // 3) free agents evaluate their offers
-  STATE.fas.forEach(fa=> evaluateFA(fa, false));
-
-  // 4) end-of-window check
-  if (STATE.day >= CAMP_DAY){
-    wireAdd('note','SYS','⌛ The market has cooled. Remaining free agents will take minimum deals or wait. Proceed to training camp when ready.');
-  }
-
-  if (!paused) render(); else { renderCap(); renderWire(); } // keep modal visible
-}
-
-function simToEnd(){
-  STATE.simEnding = true;
-  let guard=0;
-  while (STATE.day < CAMP_DAY && guard++<60){
-    STATE.day++;
-    rivalDay();
-    STATE.fas.forEach(fa=> evaluateFA(fa, false));
-  }
-  // last-call: unsigned FAs take best available / minimums
-  STATE.fas.forEach(fa=>{
-    if (fa.signed) return;
-    const best = bestOffer(fa);
-    if (best){ fa.signed={team:best.team,aav:best.aav,years:best.years};
-      wireAdd(best.team===STATE.myTeam?'sign':'loss','SIGNED',`<b>${fa.name}</b> signs with <b>${best.team}</b> at ${fmt$(best.aav)}/yr.`); }
-  });
-  wireAdd('note','SYS','Free agency has ended. Review your roster and head to training camp.');
-  STATE.simEnding=false;
-  render();
-}
-
-function goCamp(){
-  STATE.phase='camp';
-  const mine = STATE.fas.filter(f=>f.signed&&f.signed.team===STATE.myTeam);
-  const spent = mine.reduce((s,f)=>s+f.signed.aav,0);
-  wireAdd('note','CAMP', `Training camp opens. You added ${mine.length} free agent${mine.length===1?'':'s'} for ${fmt$(spent)}/yr total.`);
-  document.getElementById('faList').innerHTML =
-    `<div style="text-align:center;padding:1.5rem">
-       <div class="sectlbl">Camp — Roster Summary</div>
-       <p class="tiny muted">Prototype ends here. In the full version, training camp is a single screen to finalize the 18-man roster.</p>
-       <div style="margin-top:1rem;display:flex;flex-direction:column;gap:.4rem">
-       ${mine.length? mine.map(f=>`<div class="fa"><div class="fa-top"><span class="fa-name">${f.name}</span><span class="fa-pos">${f.pos}</span><span class="fa-val"><div class="ask">${fmt$(f.signed.aav)}</div><div class="lbl">${f.signed.years}y</div></span></div></div>`).join('')
-         : '<p class="muted tiny">You signed no free agents this offseason.</p>'}
-       </div>
-     </div>`;
-  render();
-}
-
-// ---------- toast ----------
+/* ---------- toast ---------- */
 let _toastT;
-function toast(msg){
-  const el=document.getElementById('toast');
-  el.textContent=msg; el.className='toast';
-  clearTimeout(_toastT); _toastT=setTimeout(()=>el.className='toast hidden',2600);
-}
+function toast(msg){ const el=document.getElementById('toast'); el.textContent=msg; el.className='toast';
+  clearTimeout(_toastT); _toastT=setTimeout(()=>el.className='toast hidden',2600); }
 
-// ---------- boot ----------
+/* ---------- boot ---------- */
 buildIntro();
-</script>
-</body>
-</html>
+</script></body></html>
